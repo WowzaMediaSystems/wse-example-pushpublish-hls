@@ -99,7 +99,7 @@ The following optional parameters are also supported in map entries:
 
 * **"host":"myHost.com"** - The host domain you want to push to (if required by your profile).
 
-* **"post":"1234"** - The host port you want to push to (if required by your profile).
+* **"port":"1234"** - The host port you want to push to (if required by your profile).
 
 * **"username":"myUsername"** - The user name required to connect to the destination (if required by your profile).
 
@@ -123,9 +123,9 @@ Additionally, if your implementation supports them, you can define custom parame
 
 <a name="SampleImplementation"></a>
 ## Sample Implementation
-The sample implementation we've provided is fully functional and can be used as a starting point for your custom implementation. This sample implementation writes playlists and media segments to local disk, which can then be played back using a player such as [VLC media player](http://www.videolan.org/vlc/index.html).
+The sample implementations we've provided are fully functional and can be used as a starting point for your own custom implementations. The **File** sample implementation writes playlists and media segments to local disk, which can then be played back using a player such as [VLC media player](http://www.videolan.org/vlc/index.html). The **Http** sample implementation writes playlists and media segments to a HTTP server that can handle **HTTP PUT** requests.
 
-To configure the sample implementation:
+To configure the sample implementations:
 
 1. Copy the **wse-example-pushpublishing-hls.jar** file from the package into your Wowza Streaming Engine **[install-dir]/lib** folder.
 
@@ -143,6 +143,17 @@ To configure the sample implementation:
 		 <HTTPConfiguration>
 		 </HTTPConfiguration>
 	 </PushPublishProfile>
+	 <PushPublishProfile>
+		 <Name>cupertino-http</Name>
+		 <Protocol>HTTP</Protocol>
+		 <BaseClass>com.mycompany.wms.example.pushpublish.protocol.cupertino.PushPublishHTTPCupertinoHTTPHandler</BaseClass>
+		 <UtilClass></UtilClass>
+		 <Implementation>
+			 <Name>Cupertino HTTP</Name>
+		 </Implementation>
+		 <HTTPConfiguration>
+		 </HTTPConfiguration>
+	 </PushPublishProfile>
 	 ```
 3. Enable the Stream Targets feature on an application in Wowza Streaming Engine Manager.
 
@@ -156,19 +167,33 @@ To configure the sample implementation:
 The following samples use a stream named **myStream**. Replace **myStream** with the name of your stream.
 
 ```
+#cupertino-file entries
 myStream={"entryName":"myStream", "profile":"cupertino-file", "streamName":"myOutputStream", "destinationName":"filesystem", "file.root":"c:\temp\hlsfile"}
 
 myStream={"entryName":"myStreamBackup", "profile":"cupertino-file", "streamName":"myOutputStream", "destinationName":"filesystem", "file.root":"c:\temp\hlsfile", "destinationServer":"backup" }
 
 myStream={"entryName":"myStreamRedundant", "profile":"cupertino-file", "streamName":"myOutputStream", "destinationName":"filesystem", "file.root":"c:\temp\hlsfile", "destinationServer":"redundant" }
+
+#cupertino-http entries
+myStream={"entryName":"myStream-http", "profile":"cupertino-http", "streamName":"myOutputStream", "destinationName":"webserver", "host":"example.com", "http.path":"hls"}
+
+myStream={"entryName":"myStreamBackup-http", "profile":"cupertino-http", "streamName":"myOutputStream", "destinationName":"webserver", "host":"example.com", "http.path":"hls", "destinationServer":"backup" }
+
+myStream={"entryName":"myStreamRedundant-http", "profile":"cupertino-http", "streamName":"myOutputStream", "destinationName":"webserver", "host":"example.com", "http.path":"hls", "destinationServer":"redundant" }
 ```
 
 For the following sample entries, the transcoder must be enabled and configured to use the default template (**Transrate**) for myStream. For more information, see [How to set up and run Wowza Transcoder for live streaming](https://www.wowza.com/forums/content.php?304-How-to-set-up-and-run-Wowza-Transcoder-for-live-streaming).
 
 ```
+#cupertino-file entries
 myStream_360p={"entryName":"myStream360p", "profile":"cupertino-file", "streamName":"myOutputStream360p", "destinationName":"filesystem", "file.root":"c:\temp\hlsfile", "adaptiveGroups":"Group1"}
 
 myStream_160p={"entryName":"myStream160p", "profile":"cupertino-file", "streamName":"myOutputStream160p", "destinationName":"filesystem", "file.root":"c:\temp\hlsfile", "adaptiveGroups":"Group1"}
+
+#cupertino-http entries
+myStream_360p={"entryName":"myStream360p-http", "profile":"cupertino-http", "streamName":"myOutputStream360p", "destinationName":"webserver", "host":"example.com", "http.path":"hls", "adaptiveGroups":"Group1"}
+
+myStream_160p={"entryName":"myStream160p-http", "profile":"cupertino-http", "streamName":"myOutputStream160p", "destinationName":"webserver", "host":"example.com", "http.path":"hls", "adaptiveGroups":"Group1"}
 ```
 
 <a name="AppleHLSWorkflow"></a>

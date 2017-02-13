@@ -13,5 +13,17 @@
 			<Properties>
 			</Properties>
 		</PushPublishProfile>
+		<PushPublishProfile>
+			<Name>cupertino-http</Name>
+			<Protocol>HTTP</Protocol>
+			<BaseClass>com.mycompany.wms.example.pushpublish.protocol.cupertino.PushPublishHTTPCupertinoHTTPHandler</BaseClass>
+			<Implementation>
+				<Name>Cupertino HTTP</Name>
+			</Implementation>
+			<HTTPConfiguration>
+			</HTTPConfiguration>
+			<Properties>
+			</Properties>
+		</PushPublishProfile>
 	</PushPublishProfiles>
 </Root>

@@ -28,7 +28,7 @@ Wowza Streaming Engine 4.5.0 or later.
 <a name="PushPublishingProfilesCustom"></a>
 ## Add a custom Apple HLS push-publishing profile to Wowza Streaming Engine
 To add a custom push publishing profile, you must:
-1. Add a profile entry and any profile-specific properties to the **[install-dir]/conf/PushPublishingProfilesCustom.xml** file. (If the file doesn't exist, create it.) See [Push publishing profiles](#PushPublishingProfiles) below.
+1. Add a profile entry and any profile-specific properties to the **[install-dir]/conf/PushPublishProfilesCustom.xml** file. (If the file doesn't exist, create it.) See [Push publishing profiles](#PushPublishingProfiles) below.
 
 2. Copy the jar file containing your custom implementation to **[install-dir]/lib**.
 

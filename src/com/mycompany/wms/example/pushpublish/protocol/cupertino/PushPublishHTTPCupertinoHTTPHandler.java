@@ -1,8 +1,7 @@
 /*
-* This code and all components (c) Copyright 2017, Wowza Media Systems, LLC. All rights reserved.
-* This code is licensed pursuant to the BSD 3-Clause License.
-*/
-
+ * This code and all components (c) Copyright 2018, Wowza Media Systems, LLC. All rights reserved.
+ * This code is licensed pursuant to the BSD 3-Clause License.
+ */
 package com.mycompany.wms.example.pushpublish.protocol.cupertino;
 
 import java.io.ByteArrayOutputStream;

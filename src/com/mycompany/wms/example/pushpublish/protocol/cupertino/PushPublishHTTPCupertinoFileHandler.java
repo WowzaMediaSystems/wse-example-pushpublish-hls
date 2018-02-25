@@ -258,15 +258,13 @@ public class PushPublishHTTPCupertinoFileHandler extends PushPublishHTTPCupertin
 		{
 			File destinationDir = getDestionationDir();
 			String path = destinationDir + "/" + mediaSegment.getUri();
-			int idx = path.lastIndexOf("/media_");
-			path = path.substring(0,idx);
 
 			File file = new File(path);
 
-			if (!file.exists())
-				file.mkdirs();
+			File dir = file.getParentFile();
+			if (dir != null && !dir.exists())
+				dir.mkdirs();
 
-			file = new File(destinationDir + "/" + mediaSegment.getUri());
 			if (!file.exists())
 				file.createNewFile();
 

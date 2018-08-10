@@ -177,7 +177,7 @@ public class PushPublishHTTPCupertinoHTTPHandler extends PushPublishHTTPCupertin
 	public int sendGroupMasterPlaylist(String groupName, PlaylistModel playlist)
 	{
 		int retVal = 0;
-		String playlistPath = getDestinationGroupPath() + "/" + playlist.getUri();
+		String playlistPath = playlist.getUri().getPath().replaceFirst("../", basePath);
 
 		retVal = writePlaylist(playlist, playlistPath);
 		return retVal;
@@ -187,7 +187,7 @@ public class PushPublishHTTPCupertinoHTTPHandler extends PushPublishHTTPCupertin
 	public int sendMasterPlaylist(PlaylistModel playlist)
 	{
 		int retVal = 0;
-		String playlistPath = getDestinationPath() + "/" + playlist.getUri();
+		String playlistPath = playlist.getUri().getPath().replaceFirst("../", basePath);
 
 		retVal = writePlaylist(playlist, playlistPath);
 		return retVal;
@@ -197,7 +197,7 @@ public class PushPublishHTTPCupertinoHTTPHandler extends PushPublishHTTPCupertin
 	public int sendMediaPlaylist(PlaylistModel playlist)
 	{
 		int retVal = 0;
-		String playlistPath = getDestinationPath() + "/" + playlist.getUri();
+		String playlistPath = playlist.getUri().getPath().replaceFirst("../", basePath);
 
 		retVal = writePlaylist(playlist, playlistPath);
 		return retVal;
@@ -382,13 +382,6 @@ public class PushPublishHTTPCupertinoHTTPHandler extends PushPublishHTTPCupertin
 		return basePath + getDstStreamName() + "-b";
 	}
 
-	private String getDestinationGroupPath()
-	{
-		if (!backup)
-			return basePath + groupName;
-		return basePath + getDstStreamName() + "-b";
-	}
-	
 	private String getPortStr()
 	{
 		String portStr = "";

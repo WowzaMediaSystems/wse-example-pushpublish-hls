@@ -152,7 +152,7 @@ public class PushPublishHTTPCupertinoFileHandler extends PushPublishHTTPCupertin
 			if (!destinationDir.exists())
 				destinationDir.mkdirs();
 
-			File playlistFile = new File(destinationDir + "/" + playlist.getUri());
+			File playlistFile = new File(rootDir, playlist.getUri().getPath().replaceFirst("../", ""));
 			if (!playlistFile.exists())
 				playlistFile.createNewFile();
 
@@ -188,7 +188,7 @@ public class PushPublishHTTPCupertinoFileHandler extends PushPublishHTTPCupertin
 			if (!destinationDir.exists())
 				destinationDir.mkdirs();
 
-			File playlistFile = new File(destinationDir + "/" + playlist.getUri());
+			File playlistFile = new File(rootDir, playlist.getUri().getPath().replaceFirst("../", ""));
 			if (!playlistFile.exists())
 				playlistFile.createNewFile();
 
@@ -224,7 +224,7 @@ public class PushPublishHTTPCupertinoFileHandler extends PushPublishHTTPCupertin
 			if (!destinationDir.exists())
 				destinationDir.mkdirs();
 
-			File playlistFile = new File(destinationDir + "/" + playlist.getUri());
+			File playlistFile = new File(rootDir, playlist.getUri().getPath().replaceFirst("../", ""));
 			if (!playlistFile.exists())
 				playlistFile.createNewFile();
 

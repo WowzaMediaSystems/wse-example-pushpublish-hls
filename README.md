@@ -1,7 +1,7 @@
 ﻿# wse-example-pushpublishing-hls
 
 ## Create a custom Wowza Streaming Engine Apple HLS stream target (push publishing)
-[Wowza Streaming Engine™ media server software](https://www.wowza.com/products/streaming-engine) version 4.5.0 enables you to develop your own Apple HLS (cupertino) Stream Target to support custom destinations that may not be supported by the built-in push publishing HLS profiles.  
+[Wowza Streaming Engine™ media server software](https://www.wowza.com/products/streaming-engine) version 4.5.0 and later enables you to develop your own Apple HLS (cupertino) Stream Target to support custom destinations that may not be supported by the built-in push publishing HLS profiles.  
 
 The abstract base class, which you must extend in your custom implementation, enables you to create and maintain playlists, and to gather audio/video content from Wowza Streaming Engine live stream packetizers and package it into media segments. For your convenience, we've also modeled the playlists and media segments in Java classes and provided utility classes and code examples that demonstrate how to convert the models into content that can be transmitted to the destination and consumed by any player.
 

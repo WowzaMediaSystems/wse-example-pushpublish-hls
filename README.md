@@ -16,7 +16,7 @@ The abstract base class, which you must extend in your custom implementation, en
 - [Sample Implementation](#SampleImplementation)
 - [About the Apple HLS push-publishing workflow in Wowza Streaming Engine](#AppleHLSWorkflow)
 - [Configure for redundancy](#Redundancy)
-- [Configure Adaptive Groups](#AdaptiveGroups)
+- [Configure an Adaptive Group](#AdaptiveGroup)
 - [More resources](#Resources)
 - [Contact](#Contact)
 - [License](#License)
@@ -113,7 +113,7 @@ The following optional parameters are also supported in map entries:
 
 * **"http.playlistTimeout":"false"** - The time, in milliseconds, that a cross-session playlist is maintained. The default value is **120000** (2 minutes).
 
-* **"adaptiveGroups":"Group1"** - Enables multiple map entries to be grouped into a multi-rendition playlist. The value is a name for the group. For more information, see [Configure Adaptive Groups](#AdaptiveGroups) below.
+* **"adaptiveGroup":"Group1"** - Enables multiple map entries to be grouped into a multi-rendition playlist. The value is a name for the group. For more information, see [Configure an Adaptive Group](#AdaptiveGroup) below.
 
 * **"setSendToBackupServer":"false"** - Instructs the profile entry instance to push to its **backup** destination endpoint, if applicable. The default value is **false**. Note that use of this parameter can vary based on your implementation.
 
@@ -186,14 +186,14 @@ For the following sample entries, the transcoder must be enabled and configured 
 
 ```
 #cupertino-file entries
-myStream_360p={"entryName":"myStream360p", "profile":"cupertino-file", "streamName":"myOutputStream360p", "destinationName":"filesystem", "file.root":"c:\temp\hlsfile", "adaptiveGroups":"Group1"}
+myStream_360p={"entryName":"myStream360p", "profile":"cupertino-file", "streamName":"myOutputStream360p", "destinationName":"filesystem", "file.root":"c:\temp\hlsfile", "adaptiveGroup":"Group1"}
 
-myStream_160p={"entryName":"myStream160p", "profile":"cupertino-file", "streamName":"myOutputStream160p", "destinationName":"filesystem", "file.root":"c:\temp\hlsfile", "adaptiveGroups":"Group1"}
+myStream_160p={"entryName":"myStream160p", "profile":"cupertino-file", "streamName":"myOutputStream160p", "destinationName":"filesystem", "file.root":"c:\temp\hlsfile", "adaptiveGroup":"Group1"}
 
 #cupertino-http entries
-myStream_360p={"entryName":"myStream360p-http", "profile":"cupertino-http", "streamName":"myOutputStream360p", "destinationName":"webserver", "host":"example.com", "http.path":"hls", "adaptiveGroups":"Group1"}
+myStream_360p={"entryName":"myStream360p-http", "profile":"cupertino-http", "streamName":"myOutputStream360p", "destinationName":"webserver", "host":"example.com", "http.path":"hls", "adaptiveGroup":"Group1"}
 
-myStream_160p={"entryName":"myStream160p-http", "profile":"cupertino-http", "streamName":"myOutputStream160p", "destinationName":"webserver", "host":"example.com", "http.path":"hls", "adaptiveGroups":"Group1"}
+myStream_160p={"entryName":"myStream160p-http", "profile":"cupertino-http", "streamName":"myOutputStream160p", "destinationName":"webserver", "host":"example.com", "http.path":"hls", "adaptiveGroup":"Group1"}
 ```
 
 <a name="AppleHLSWorkflow"></a>
@@ -236,9 +236,11 @@ You can manually configure push publishing for redundancy by creating two map en
 
 Push publishing can also be configured to "automatically" implement redundancy by setting the **"destinationServer"** parameter to **"redundant"** in a single map entry. When an incoming stream matches a **redundant** map entry, two sessions are created in memory. Each session has identical settings, as specified in the map entry, except that one is automatically designated as the backup stream (**setSendToBackupServer()** is set with **true**) and the other is designated as the primary stream (**setSendToBackupServer()** is set with **false**). In this scenario, it's expected that the **PushPublishProfile** knows any destination-specific changes that are required for a **backup** session.
 
-<a name="AdaptiveGroups"></a>
-## Configure Adaptive Groups
-To combine multiple outputs into an adaptive-bitrate (ABR) group, add the **"adaptiveGroups"** parameter to your map entries. When two or more map entries have the same **"adaptiveGroups"** value, the **ModulePushPublish** module creates a **group master PlaylistModel** and adds the **media PlaylistModel** for each session to the **group master PlaylistModel**. The module then calls one of the implementation-specific **updateGroupMasterPlaylistPlaybackURI(PlaylistModel) methods** to set the playback URI for the group.
+<a name="AdaptiveGroup"></a>
+## Configure an Adaptive Group
+> **Note:** In Wowza Streaming Engine 4.7.5.02 and earlier, the **Adaptive Group** parameter was called **Adaptive Groups**, and it supported a comma-separated list of group names. This enabled you to create a single stream target for each rendition and specify as many groups as you wanted to include the enredition in. However, due to changes in Akamai Media Service Live, one of our most common HLS destinations, the single rendition must now be pushed through multiple map entries, one for each group the rendition is part of.
+
+To combine multiple outputs into an adaptive-bitrate (ABR) group, add the **"adaptiveGroup"** parameter to your map entries. Note that you must create a separate map entry for each rendition and each adaptive group that rendition is part of. When two or more map entries have the same **"adaptiveGroup"** value, the **ModulePushPublish** module creates a **group master PlaylistModel** and adds the **media PlaylistModel** for each session to the **group master PlaylistModel**. The module then calls one of the implementation-specific **updateGroupMasterPlaylistPlaybackURI(PlaylistModel) methods** to set the playback URI for the group.
 
 After all members of the group successfully send their media playlists, the **ModulePushPublish** module calls one of the adaptive group member's implementation-specific **sendGroupMasterPlaylist(String, PlaylistModel)** to send the adaptive group playlist to the destination.
 

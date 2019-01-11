@@ -241,7 +241,8 @@ public class PushPublishHTTPCupertinoHTTPHandler extends PushPublishHTTPCupertin
 		}
 		catch (Exception e)
 		{
-			logError("sendMediaSegment", "Failed to send media segment data to " + mediaSegment.getUri(), e);
+			logError("sendMediaSegment", "Failed to send media segment data to " + url.toString(), e);
+			size = 0;
 		}
 		finally
 		{
@@ -275,7 +276,8 @@ public class PushPublishHTTPCupertinoHTTPHandler extends PushPublishHTTPCupertin
 		}
 		catch (Exception e)
 		{
-			logError("deleteMediaSegment", "Failed to delete media segment " + mediaSegment.getUri(), e);
+			logError("deleteMediaSegment", "Failed to delete media segment " + url.toString(), e);
+			retVal = 0;
 		}
 		finally
 		{
@@ -363,7 +365,8 @@ public class PushPublishHTTPCupertinoHTTPHandler extends PushPublishHTTPCupertin
 		}
 		catch (Exception e)
 		{
-			logError("sendMediaSegment", "Failed to send playlist data to " + playlist.getUri(), e);
+			logError("sendMediaSegment", "Failed to send playlist data to " + url.toString(), e);
+			retVal = 0;
 		}
 		finally
 		{

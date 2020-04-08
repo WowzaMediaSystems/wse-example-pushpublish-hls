@@ -14,15 +14,19 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 
 import com.wowza.util.IPacketFragment;
 import com.wowza.util.PacketFragmentList;
 import com.wowza.util.StringUtils;
+import com.wowza.wms.application.IApplicationInstance;
 import com.wowza.wms.manifest.model.m3u8.MediaSegmentModel;
 import com.wowza.wms.manifest.model.m3u8.PlaylistModel;
 import com.wowza.wms.manifest.writer.m3u8.PlaylistWriter;
+import com.wowza.wms.pushpublish.manager.IPushPublisher;
 import com.wowza.wms.pushpublish.protocol.cupertino.PushPublishHTTPCupertino;
 import com.wowza.wms.server.LicensingException;
+import com.wowza.wms.stream.IMediaStream;
 import com.wowza.wms.util.PushPublishUtils;
 
 public class PushPublishHTTPCupertinoHTTPHandler extends PushPublishHTTPCupertino
@@ -49,7 +53,7 @@ public class PushPublishHTTPCupertinoHTTPHandler extends PushPublishHTTPCupertin
 
 	private static final int DEFAULT_HTTP_PORT = 80;
 	private static final int DEFAULT_HTTPS_PORT = 443;
-	
+
 	String basePath = "/";
 	String httpHost = "example.com";
 
@@ -66,8 +70,21 @@ public class PushPublishHTTPCupertinoHTTPHandler extends PushPublishHTTPCupertin
 	}
 
 	@Override
+	public void init(IApplicationInstance appInstance, String streamName, IMediaStream stream, Map<String, String> profileData, Map<String, String> maps, IPushPublisher pushPublisher, boolean streamDebug)
+	{
+		String localEntryName = PushPublishUtils.getMapString(maps, "entryName");
+
+		// playlistCrossName must be unique to the application Instance.
+		this.playlistCrossName = "pushpublish-cupertino-http-playlists-" + appInstance.getContextStr() + "-" + streamName + "-" + localEntryName;
+
+		// Call super.init() to initialize this profile and trigger call to our load() method
+		super.init(appInstance, streamName, stream, profileData, maps, pushPublisher, streamDebug);
+	}
+
+	@Override
 	public void load(HashMap<String, String> dataMap)
 	{
+		System.out.println("load: " + dataMap);
 		super.load(dataMap);
 
 		httpHost = hostname;
@@ -87,9 +104,9 @@ public class PushPublishHTTPCupertinoHTTPHandler extends PushPublishHTTPCupertin
 			sendSSLStr = sendSSLStr.toLowerCase(Locale.ENGLISH);
 			isSendSSL = sendSSLStr.startsWith("t") || sendSSLStr.startsWith("y");
 		}
-		
+
 		// set default http(s) port if it hasn't been changed from the default rtmp port.
-		if(port == 1935)
+		if (port == 1935)
 		{
 			port = isSendSSL ? DEFAULT_HTTPS_PORT : DEFAULT_HTTP_PORT;
 		}
@@ -332,6 +349,7 @@ public class PushPublishHTTPCupertinoHTTPHandler extends PushPublishHTTPCupertin
 
 	private int writePlaylist(PlaylistModel playlist, String playlistPath)
 	{
+		System.out.println("***********************************" + playlistPath);
 		int retVal = 0;
 		URL url = null;
 		HttpURLConnection conn = null;
@@ -388,7 +406,7 @@ public class PushPublishHTTPCupertinoHTTPHandler extends PushPublishHTTPCupertin
 	private String getPortStr()
 	{
 		String portStr = "";
-		if(port != DEFAULT_HTTP_PORT && port != DEFAULT_HTTPS_PORT)
+		if (port != DEFAULT_HTTP_PORT && port != DEFAULT_HTTPS_PORT)
 			portStr = ":" + port;
 		return portStr;
 	}

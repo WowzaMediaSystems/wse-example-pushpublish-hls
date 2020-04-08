@@ -4,16 +4,28 @@
  */
 package com.mycompany.wms.example.pushpublish.protocol.cupertino;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
-import com.wowza.util.*;
-import com.wowza.wms.manifest.model.m3u8.*;
-import com.wowza.wms.manifest.writer.m3u8.*;
+import com.wowza.util.IPacketFragment;
+import com.wowza.util.PacketFragmentList;
+import com.wowza.wms.application.IApplicationInstance;
+import com.wowza.wms.manifest.model.m3u8.MediaSegmentModel;
+import com.wowza.wms.manifest.model.m3u8.PlaylistModel;
+import com.wowza.wms.manifest.writer.m3u8.PlaylistWriter;
+import com.wowza.wms.pushpublish.manager.IPushPublisher;
 import com.wowza.wms.pushpublish.protocol.cupertino.PushPublishHTTPCupertino;
-import com.wowza.wms.server.*;
-import com.wowza.wms.util.*;
+import com.wowza.wms.server.LicensingException;
+import com.wowza.wms.stream.IMediaStream;
+import com.wowza.wms.util.PushPublishUtils;
 
 public class PushPublishHTTPCupertinoFileHandler extends PushPublishHTTPCupertino
 {
@@ -47,6 +59,19 @@ public class PushPublishHTTPCupertinoFileHandler extends PushPublishHTTPCupertin
 	}
 
 	@Override
+	public void init(IApplicationInstance appInstance, String streamName, IMediaStream stream, Map<String, String> profileData, Map<String, String> maps, IPushPublisher pushPublisher, boolean streamDebug)
+	{
+		String localEntryName = PushPublishUtils.getMapString(maps, "entryName");
+
+		// playlistCrossName must be unique to the application Instance.
+		this.playlistCrossName = "pushpublish-cupertino-file-playlists-" + appInstance.getContextStr() + "-" + streamName + "-" + localEntryName;
+
+		// Call super.init() to initialize this profile and trigger call to our load() method
+		super.init(appInstance, streamName, stream, profileData, maps, pushPublisher, streamDebug);
+
+	}
+
+	@Override
 	public void load(HashMap<String, String> dataMap)
 	{
 		super.load(dataMap);
@@ -54,7 +79,7 @@ public class PushPublishHTTPCupertinoFileHandler extends PushPublishHTTPCupertin
 		String destStr = PushPublishUtils.removeMapString(dataMap, "file.root");
 		if (destStr != null)
 		{
-			this.rootDir = new File(destStr );
+			this.rootDir = new File(destStr);
 			logInfo("load", "Using: " + this.rootDir);
 			if (!this.rootDir.exists())
 			{
@@ -87,7 +112,7 @@ public class PushPublishHTTPCupertinoFileHandler extends PushPublishHTTPCupertin
 	{
 		boolean retVal = true;
 
-		String path = "../" + getDstStreamName() + (this.backup ? "-b/":"/") + playlist.getUri().toString();
+		String path = "../" + getDstStreamName() + (this.backup ? "-b/" : "/") + playlist.getUri().toString();
 		try
 		{
 			playlist.setUri(new URI(path));
@@ -105,7 +130,7 @@ public class PushPublishHTTPCupertinoFileHandler extends PushPublishHTTPCupertin
 	{
 		boolean retVal = true;
 
-		String path = "../" + getDstStreamName() + (this.backup ? "-b/":"/") + playlist.getUri().toString();
+		String path = "../" + getDstStreamName() + (this.backup ? "-b/" : "/") + playlist.getUri().toString();
 		try
 		{
 			playlist.setUri(new URI(path));
@@ -166,13 +191,16 @@ public class PushPublishHTTPCupertinoFileHandler extends PushPublishHTTPCupertin
 		finally
 		{
 			if (output != null)
-				try {
+				try
+				{
 					output.flush();
 					output.close();
-				} catch (Exception e2)
+				}
+				catch (Exception e2)
 				{
 
-				};
+				}
+			;
 		}
 		return retVal;
 	}
@@ -202,13 +230,16 @@ public class PushPublishHTTPCupertinoFileHandler extends PushPublishHTTPCupertin
 		finally
 		{
 			if (output != null)
-				try {
+				try
+				{
 					output.flush();
 					output.close();
-				} catch (Exception e2)
+				}
+				catch (Exception e2)
 				{
 
-				};
+				}
+			;
 		}
 		return retVal;
 	}
@@ -238,13 +269,16 @@ public class PushPublishHTTPCupertinoFileHandler extends PushPublishHTTPCupertin
 		finally
 		{
 			if (output != null)
-				try {
+				try
+				{
 					output.flush();
 					output.close();
-				} catch (Exception e2)
+				}
+				catch (Exception e2)
 				{
 
-				};
+				}
+			;
 		}
 		return retVal;
 	}
@@ -358,7 +392,7 @@ public class PushPublishHTTPCupertinoFileHandler extends PushPublishHTTPCupertin
 		}
 		catch (MalformedURLException e)
 		{
-			logError("getDestionationLogData", "Unable to convert " + destinationDir + " to valid path" ,e);
+			logError("getDestionationLogData", "Unable to convert " + destinationDir + " to valid path", e);
 		}
 
 		return retVal;
@@ -385,13 +419,13 @@ public class PushPublishHTTPCupertinoFileHandler extends PushPublishHTTPCupertin
 	{
 		if (!this.backup)
 			return new File(this.rootDir + "/" + getDstStreamName());
-		return new File(this.rootDir + "/" + "/" + getDstStreamName()+"-b");
+		return new File(this.rootDir + "/" + "/" + getDstStreamName() + "-b");
 	}
 
 	private File getDestionationGroupDir()
 	{
 		if (!this.backup)
 			return new File(this.rootDir + "/" + this.groupName);
-		return new File(this.rootDir + "/" + getDstStreamName()+"-b");
+		return new File(this.rootDir + "/" + getDstStreamName() + "-b");
 	}
 }

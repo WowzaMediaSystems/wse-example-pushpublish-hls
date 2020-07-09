@@ -50,6 +50,7 @@ The following is an example push publishing profile entry:
 			<Protocol>protocol</Protocol>
 			<BaseClass>classpath</BaseClass>
 			<UtilClass>utility classpath</UtilClass>
+			<GroupPlaylistClass>group playlist classpath</GroupPlaylistClass>
 			<Implementation>
 				<Name>destinationname</Name>
 			</Implementation>
@@ -137,6 +138,7 @@ To configure the sample implementations:
 		 <Protocol>HTTP</Protocol>
 		 <BaseClass>com.mycompany.wms.example.pushpublish.protocol.cupertino.PushPublishHTTPCupertinoFileHandler</BaseClass>
 		 <UtilClass></UtilClass>
+		 <GroupPlaylistClass>com.wowza.wms.pushpublish.groupplaylist.PushPublishGroupPlaylist</GroupPlaylistClass>
 		 <Implementation>
 			 <Name>Cupertino File</Name>
 		 </Implementation>
@@ -148,6 +150,7 @@ To configure the sample implementations:
 		 <Protocol>HTTP</Protocol>
 		 <BaseClass>com.mycompany.wms.example.pushpublish.protocol.cupertino.PushPublishHTTPCupertinoHTTPHandler</BaseClass>
 		 <UtilClass></UtilClass>
+		 <GroupPlaylistClass>com.wowza.wms.pushpublish.groupplaylist.PushPublishGroupPlaylist</GroupPlaylistClass>
 		 <Implementation>
 			 <Name>Cupertino HTTP</Name>
 		 </Implementation>

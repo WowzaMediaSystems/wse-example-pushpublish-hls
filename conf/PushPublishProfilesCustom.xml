@@ -5,6 +5,8 @@
 			<Name>cupertino-file</Name>
 			<Protocol>HTTP</Protocol>
 			<BaseClass>com.mycompany.wms.example.pushpublish.protocol.cupertino.PushPublishHTTPCupertinoFileHandler</BaseClass>
+			<UtilClass></UtilClass>
+			<GroupPlaylistClass>com.wowza.wms.pushpublish.groupplaylist.PushPublishGroupPlaylist</GroupPlaylistClass>
 			<Implementation>
 				<Name>Cupertino File</Name>
 			</Implementation>
@@ -17,6 +19,8 @@
 			<Name>cupertino-http</Name>
 			<Protocol>HTTP</Protocol>
 			<BaseClass>com.mycompany.wms.example.pushpublish.protocol.cupertino.PushPublishHTTPCupertinoHTTPHandler</BaseClass>
+			<UtilClass></UtilClass>
+			<GroupPlaylistClass>com.wowza.wms.pushpublish.groupplaylist.PushPublishGroupPlaylist</GroupPlaylistClass>
 			<Implementation>
 				<Name>Cupertino HTTP</Name>
 			</Implementation>

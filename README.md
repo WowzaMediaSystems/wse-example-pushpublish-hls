@@ -267,4 +267,4 @@ Wowza Media Systems™ provides developers with a platform to create streaming a
 
 <a name="License"></a>
 ## License
-This code is distributed under the [BSD 3-Clause License](https://github.com/WowzaMediaSystems/wse-example-pushpublish-hls/blob/master/LICENSE.txt).
+This code is distributed under the [BSD 3-Clause License](/LICENSE.txt).
